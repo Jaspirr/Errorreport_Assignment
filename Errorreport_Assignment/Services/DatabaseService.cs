@@ -7,120 +7,156 @@ using Errorreport_Assignment.MVVM.Model.Entitites;
 using System;
 using Microsoft.Data.SqlClient;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Errorreport_Assignment.Services;
 
-public class DataService
+internal class DatabaseService
 {
-    private readonly string connectionString;
+    public static DataContext _context = new DataContext();
 
-    public DataService(string connectionString)
+    public static async Task SaveToDbAsync(ErrorReportModel newErrorReport)
     {
-        this.connectionString = connectionString;
-    }
+        CustomerEntity customerEntity = newErrorReport;
+        ErrorReportEntity errorReportEntity = newErrorReport;
+        CustomerEntity _currentCustomer = null!;
 
-    public List<CustomerModel> GetCustomers()
-    {
-        using (SqlConnection connection = new SqlConnection(connectionString))
+        //Checks if there is any customer in the db with the entered email already
+        var _allCustomers = await _context.CustomerModels.ToListAsync();
+        var customerNotUniqueEmail = _allCustomers.Where(x => x.EmailAddress == customerEntity.EmailAddress);
+
+        foreach (var customer in customerNotUniqueEmail)
         {
-            connection.Open();
-
-            SqlCommand command = new SqlCommand("SELECT * FROM Customers", connection);
-
-            SqlDataReader reader = command.ExecuteReader();
-
-            List<CustomerModel> customers = new List<CustomerModel>();
-
-            while (reader.Read())
+            _currentCustomer = new CustomerEntity()
             {
-                CustomerModel customer = new CustomerModel
-                {
-                    CustomerId = reader.GetGuid(0),
-                    FirstName = reader.GetString(1),
-                    LastName = reader.GetString(2),
-                    EmailAddress = reader.GetString(3),
-                    PhoneNumber = reader.GetString(4)
-                };
+                CustomerId = customer.CustomerId,
+                FirstName = customer.FirstName,
+                LastName = customer.LastName,
+                EmailAddress = customer.EmailAddress,
+                PhoneNumber = customer.PhoneNumber
+            };
+        }
 
-                customers.Add(customer);
-            }
-
-            return customers;
+        if (customerNotUniqueEmail.IsNullOrEmpty())
+        {
+            _context.Add(customerEntity);
+            errorReportEntity.CustomerId = customerEntity.CustomerId;
+            _context.Add(errorReportEntity);
+            await _context.SaveChangesAsync();
+        }
+        else
+        {
+            //If email is not unique in the db, it sets the newCase to the customer with the matching email in db.
+            errorReportEntity.CustomerId = _currentCustomer.CustomerId;
+            _context.Add(errorReportEntity);
+            await _context.SaveChangesAsync();
         }
     }
 
-    public List<ErrorReportModel> GetErrorReports()
+    public static async Task<ObservableCollection<ErrorReportModel>> GetAllFromDbAsync()
     {
-        using (SqlConnection connection = new SqlConnection(connectionString))
+        var _errorReport = new ObservableCollection<ErrorReportModel>();
+
+        foreach (var _errorReport in await _context.ErrorReportModels.Include(x => x.Customer).ToListAsync())
         {
-            connection.Open();
+            CustomerEntity customerEntity = _errorReport.Customer;
+            ErrorReportEntity errorReportEntity = _errorReport;
 
-            SqlCommand command = new SqlCommand("SELECT * FROM ErrorReports", connection);
-
-            SqlDataReader reader = command.ExecuteReader();
-
-            List<ErrorReportModel> errorReports = new List<ErrorReportModel>();
-
-            while (reader.Read())
+            _errorReport.Add(new ErrorReportModel
             {
-                ErrorReportModel errorReport = new ErrorReportModel
-                {
-                    Id = reader.GetInt32(0),
-                    Description = reader.GetString(1),
-                    EntryTime = reader.GetDateTime(2),
-                    Status = reader.GetString(3),
-                    CustomerId = reader.GetGuid(4)
-                };
-
-                errorReports.Add(errorReport);
-            }
-
-            return errorReports;
+                Id = errorReportEntity.Id,
+                Description = errorReportEntity.Description,
+                EntryTime = errorReportEntity.EntryTime,
+                Status = errorReportEntity.Status,
+                CustomerFirstName = customerEntity.FirstName,
+                CustomerLastName = customerEntity.LastName,
+                CustomerEmailAddress = customerEntity.EmailAddress,
+                CustomerPhoneNumber = customerEntity.PhoneNumber
+            });
         }
+
+        return _errorReport;
+    }
+
+    public static async Task<ObservableCollection<WorkerModel>> GetAllWorkersAsync()
+    {
+        var _worker = new ObservableCollection<WorkerModel>();
+
+        foreach (var _employee in await _context.WorkerModels.ToListAsync())
+        {
+            WorkerEntity workerEntity = _worker;
+
+            _workers.Add(new WorkerModel
+            {
+                Id = WorkerEntity.Id,
+                FirstName = WorkerEntity.FirstName,
+                LastName = WorkerEntity.LastName,
+                NameInitials = WorkerEntity.NameInitials
+            });
+        }
+
+        return _workers;
     }
 
 
-    public List<CommentModel> GetComments(Guid errorReportId)
+    public static async Task<ObservableCollection<CommentModel>> GetSpecificCommentsFromDbAsync(ErrorReportModel currentCase)
     {
-        using (SqlConnection connection = new SqlConnection(connectionString))
+        var _allComments = new ObservableCollection<CommentEntity>();
+        var _actualComments = new ObservableCollection<CommentModel>();
+        var _currentCaseId = currentCase.Id;
+
+        foreach (var _comment in await _context.CommentModels.ToListAsync())
         {
-            connection.Open();
+            _allComments.Add(_comment);
+        };
 
-            SqlCommand command = new SqlCommand("SELECT * FROM Comments WHERE ErrorReportId = @ErrorReportId", connection);
-            command.Parameters.AddWithValue("@ErrorReportId", errorReportId);
-
-            SqlDataReader reader = command.ExecuteReader();
-
-            List<CommentModel> comments = new List<CommentModel>();
-
-            while (reader.Read())
-            {
-                CommentModel comment = new CommentModel  
-                {
-                    Id = reader.GetInt32(0),
-                    CommentString = reader.GetString(1),
-                    EntryTime = reader.GetDateTime(2),
-                    ErrorReportId = reader.GetInt32(3)
-                };
-
-                comments.Add(comment);
-            }
-
-            return comments;
+        foreach (var _actualComment in _allComments.Where(x => x.ErrorReportId == _currentCaseId))
+        {
+            CommentModel _comment = _actualComment;
+            _actualComments.Add(_comment);
         }
+
+        return _actualComments;
     }
 
-    public void UpdateErrorReportStatus(Guid errorReportId, string status)
+    public static async Task ChangeStatusAsync(ErrorReportModel currentErrorReport)
     {
-        using (SqlConnection connection = new SqlConnection(connectionString))
+        var _dbErrorReportEntity = await _context.ErrorReportModels.FirstOrDefaultAsync(x => x.Id == currentErrorReport.Id);
+
+        _dbErrorReportEntity!.Status = currentErrorReport.Status;
+
+        _context.Update(_dbErrorReportEntity);
+        await _context.SaveChangesAsync();
+    }
+
+    public static async Task SaveCommentToDbAsync(CommentModel comment, int errorReportId)
+    {
+        CommentEntity commentEntity = comment;
+        commentEntity.ErrorReportId = errorReportId;
+        _context.Add(commentEntity);
+        await _context.SaveChangesAsync();
+    }
+
+    public static async Task RemoveCaseAsync(ErrorReportModel clickedErrorReport)
+    {
+        var _dbErrorReportEntity = await _context.ErrorReportModels.FirstOrDefaultAsync(x => x.ErrorReportId == clickedErrorReport.Id);
+
+        if (_dbErrorReportEntity != null)
         {
-            connection.Open();
+            var _allComments = new List<CommentEntity>();
 
-            SqlCommand command = new SqlCommand("UPDATE ErrorReports SET Status = @Status WHERE Id = @Id", connection);
-            command.Parameters.AddWithValue("@Status", status);
-            command.Parameters.AddWithValue("@Id", errorReportId);
+            foreach (var _comment in await _context.CommentModels.ToListAsync())
+            {
+                _allComments.Add(_comment);
+            };
 
-            command.ExecuteNonQuery();
+            foreach (var _associatedComment in _allComments.Where(x => x.ErrorReportId == _dbErrorReportEntity.ErrorReportId))
+            {
+                _context.Remove(_associatedComment);
+            }
+
+            _context.Remove(_dbErrorReportEntity);
+            await _context.SaveChangesAsync();
         }
     }
 }

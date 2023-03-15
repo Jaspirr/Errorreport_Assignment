@@ -8,20 +8,37 @@ using System.ComponentModel;
 
 namespace Errorreport_Assignment.MVVM.ViewModels;
 
-public partial class MainViewModel : INotifyPropertyChanged
+public partial class MainViewModel : ObservableObject
 {
-    private readonly AddReportViewModel _errorReportViewModel;
-    private readonly AddCommentViewModel _commentViewModel;
+    [ObservableProperty]
+    public static ObservableObject currentViewModel = null!;
 
     public MainViewModel()
     {
-        _errorReportViewModel = new AddReportViewModel();
-        _commentViewModel = new AddCommentViewModel();
+        CurrentViewModel = new FirstViewModel();
     }
 
-    public event PropertyChangedEventHandler PropertyChanged;
+    //Navigation commands
+    [RelayCommand]
+    public void GoToAllErrorReportList()
+    {
+        CurrentViewModel = new AllReportListViewModel();
+    }
 
-    public AddReportViewModel ErrorReportViewModel => _errorReportViewModel;
+    [RelayCommand]
+    public void GoToAddErrorReport()
+    {
+        CurrentViewModel = new AddReportViewModel();
+    }
 
-    public AddCommentViewModel CommentViewModel => _commentViewModel;
+    [RelayCommand]
+    public void GoToAddComment()
+    {
+        ErrorReportModel _currentErrorReport = AllErrorReportListView.clickedCase;
+
+        if (_currentErrorReport != null)
+            CurrentViewModel = new AddCommentViewModel(_currentErrorReport);
+        else
+            CurrentViewModel = new ErrorReportDetailsViewModel();
+    }
 }

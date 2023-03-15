@@ -7,78 +7,56 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Errorreport_Assignment.Contexts;
-using System.Linq;
 using System;
-using GalaSoft.MvvmLight;
 using Microsoft.EntityFrameworkCore;
 
 namespace Errorreport_Assignment.MVVM.ViewModels;
 
-public class AddReportViewModel : ViewModelBase
+public partial class AddACaseViewModel : ObservableObject
 {
-    private readonly DataContext _context;
+    [ObservableProperty]
+    private string firstName = string.Empty;
 
-    public AddReportViewModel(DataContext context)
+    [ObservableProperty]
+    private string lastName = string.Empty;
+
+    [ObservableProperty]
+    private string emailAddress = string.Empty;
+
+    [ObservableProperty]
+    private string phoneNumber = string.Empty;
+
+    [ObservableProperty]
+    private string enteredDescription = string.Empty;
+
+    private void ClearForm()
     {
-        _context = context;
-        AddCustomerCommand = new RelayCommand(AddCustomer, CanAddCustomer);
+        FirstName = string.Empty;
+        LastName = string.Empty;
+        EmailAddress = string.Empty;
+        PhoneNumber = string.Empty;
+        EnteredDescription = string.Empty;
     }
 
-    // Properties for data bindings
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public string EmailAddress { get; set; }
-    public string PhoneNumber { get; set; }
-    public string Description { get; set; }
-
-    // Command for adding a new customer
-    public RelayCommand AddCustomerCommand { get; set; }
-
-    private bool CanAddCustomer()
+    [RelayCommand]
+    public async Task SaveAsync()
     {
-        // Check that required fields are not empty
-        return !string.IsNullOrEmpty(FirstName) && !string.IsNullOrEmpty(LastName)
-            && !string.IsNullOrEmpty(EmailAddress) && !string.IsNullOrEmpty(PhoneNumber);
-    }
-
-    private void AddCustomer()
-    {
-        // Create a new Customer object with data from properties
-        var customer = new CustomerModel
+        //Checking that the entered case is not empty
+        if (EnteredDescription != "" && EmailAddress != "")
         {
-            CustomerId = Guid.NewGuid(),
-            FirstName = FirstName,
-            LastName = LastName,
-            EmailAddress = EmailAddress,
-            PhoneNumber = PhoneNumber
-        };
+            var newErrorReport = new ErrorReportModel
+            {
+                Description = EnteredDescription,
+                CustomerFirstName = FirstName,
+                CustomerLastName = LastName,
+                CustomerEmailAdress = EmailAddress,
+                CustomerPhoneNumber = PhoneNumber
+            };
 
-        // Create a new ErrorReport object with data from properties
-        var errorReport = new ErrorReportModel
-        {
-            Description = Description,
-            EntryTime = DateTimeOffset.Now,
-            Status = 0,
-            Customer = customer
-        };
+            await DatabaseService.SaveToDbAsync(newErrorReport);
 
-        // Add the new ErrorReport to the DbContext and save changes
-        _context.ErrorReports.Add(errorReport);
-        _context.SaveChanges();
-
-        // Reset properties
-        FirstName = "";
-        LastName = "";
-        EmailAddress = "";
-        PhoneNumber = "";
-        Description = "";
-
-       
-    }
-    // Update ErrorReports collection to refresh the view
-    public void UpdateErrorReports()
-    {
-        ErrorReports = new ObservableCollection<ErrorReportModel>(_context.ErrorReports.Include(er => er.Customer).ToList());
+            ClearForm();
+        }
     }
 }
 //  [ObservableProperty]

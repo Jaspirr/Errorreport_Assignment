@@ -8,38 +8,137 @@ using System;
 using Errorreport_Assignment.MVVM.Model.Entitites;
 using System.ComponentModel;
 using Errorreport_Assignment.Contexts;
+using System.Collections.ObjectModel;
 
 namespace Errorreport_Assignment.MVVM.ViewModels;
 
 public partial class AddCommentViewModel : ObservableObject
 {
-    private readonly DataContext? _dbDataContext;
+    [ObservableProperty]
+    private int? id;
 
+    [ObservableProperty]
+    private string description = string.Empty;
 
-    public event PropertyChangedEventHandler? PropertyChanged;
+    [ObservableProperty]
+    private string? entryTime;
 
-    private string? _commentText;
+    [ObservableProperty]
+    private string status;
 
-    public string? CommentText
+    [ObservableProperty]
+    private string firstName = string.Empty;
+
+    [ObservableProperty]
+    private string lastName = string.Empty;
+
+    [ObservableProperty]
+    private string emailAdress = string.Empty;
+
+    [ObservableProperty]
+    private string? phoneNumber = string.Empty;
+
+    [ObservableProperty]
+    private string enteredComment = string.Empty;
+
+    [ObservableProperty]
+    private string selectedStatus = "Välj en ny status:";
+
+    [ObservableProperty]
+    private WorkerModel selectedWorker = null!;
+
+    [ObservableProperty]
+    private ErrorReportModel _currentErrorReport = null!;
+
+    [ObservableProperty]
+    private ObservableCollection<WorkerModel> workersList = null!;
+
+    [ObservableProperty]
+    private ObservableCollection<CommentModel> commentsList = null!;
+
+    public AddCommentViewModel()
     {
-        get { return _commentText; }
-        set
-        {
-            if (_commentText != value)
-            {
-                _commentText = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CommentText)));
-            }
-        }
+        Task.Run(async () => await populateWorkersList());
     }
 
-    public void AddComment(ErrorReportModel errorReport, CommentModel comment)
+    public async Task populateLists(ErrorReportModel currentErrorReport)
     {
-        var commentEntity = comment.ToEntity();
-        _dbDataContext.Comments.Add(commentEntity);
-        _dbDataContext.SaveChanges();
+        WorkersList = await DatabaseService.GetAllWorkersAsync();
+        CommentsList = await DatabaseService.GetSpecificCommentsFromDbAsync(currentErrorReport);
+    }
 
-        errorReport.Comments.Add(comment);
+    public async Task populateWorkersList()
+    {
+        WorkersList = await DatabaseService.GetAllEmployeesAsync();
+    }
+
+    public AddCommentViewModel(ErrorReportModel currentErrorReport)
+    {
+        Task.Run(async () => await populateLists(_currentErrorReport));
+
+        _currentErrorReport = currentErrorReport;
+
+        Id = _currentErrorReport.Id;
+        Description = _currentErrorReport.Description;
+        EntryTime = _currentErrorReport.EntryTime.ToString("dd/MM/yyyy HH:mm");
+
+        //Convert the enum to a string, in swedish:
+        if (_currentErrorReport.Status == ErrorReportStatus.NotStarted)
+            Status = "Ej påbörjad";
+        else if (_currentErrorReport.Status == ErrorReportStatus.InProgress)
+            Status = "Pågående";
+        else if (_currentErrorReport.Status == ErrorReportStatus.Completed)
+            Status = "Avslutad";
+
+        FirstName = _currentErrorReport.CustomerFirstName;
+        LastName = _currentErrorReport.CustomerLastName;
+        EmailAdress = _currentErrorReport.CustomerEmailAdress;
+
+        //Checks if there is a phonenumber in the db and if there isn't any,
+        //sets it to a string-message for the frontend:
+        if (_currentErrorReport.CustomerPhoneNumber == "             ")
+            PhoneNumber = "Inget telefonnummer angivet.";
+        else
+            PhoneNumber = _currentErrorReport.CustomerPhoneNumber;
+    }
+
+    [RelayCommand]
+    public async Task UpdateStatusAsync()
+    {
+        if (SelectedStatus == "Ej påbörjad")
+            _currentErrorReport.Status = ErrorReportStatus.NotStarted;
+        else if (SelectedStatus == "Pågående")
+            _currentErrorReport.Status = ErrorReportStatus.InProgress;
+        else if (SelectedStatus == "Avslutad")
+            _currentErrorReport.Status = ErrorReportStatus.Completed;
+
+
+        if (SelectedStatus != "Välj en ny status:")
+        {
+            await DatabaseService.ChangeStatusAsync(_currentErrorReport);
+
+            //This updates the frontend's current status to the new status
+            Status = SelectedStatus;
+        }
+        else
+            SelectedStatus = "Välj en ny status:";
+    }
+
+    [RelayCommand]
+    public async Task AddCommentAsync()
+    {
+        CommentModel _comment = new CommentModel
+        {
+            CommentString = EnteredComment,
+            SigningEmployee = SelectedWorker
+        };
+
+        await DatabaseService.SaveCommentToDbAsync(_comment, _currentErrorReport.Id);
+
+        //Resetting and updating frontend
+        CommentsList.Add(_comment);
+        EnteredComment = "";
+        SelectedWorker = WorkersList[0];
     }
 }
 //private readonly ErrorReportModel currentTask = null!;

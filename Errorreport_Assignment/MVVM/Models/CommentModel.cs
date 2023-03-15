@@ -9,10 +9,9 @@ public class CommentModel
 {
     [Key]
     public int Id { get; set; }
-    public string? CommentString { get; set; }
-    public DateTime Time { get; set; }
-    public int ErrorReportId { get; set; }
-    public virtual ErrorReportModel? ErrorReport { get; set; }
+    public string CommentString { get; set; } = null!;
+    public DateTime EntryTime { get; set; } = DateTime.Now;
+    public Employee SigningEmployee { get; set; } = null!;
 
 }
 

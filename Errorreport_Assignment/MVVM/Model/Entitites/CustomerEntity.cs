@@ -11,16 +11,26 @@ namespace Errorreport_Assignment.MVVM.Model.Entitites;
 public class CustomerEntity
 {
     [Key]
-    public Guid Id { get; set; }
-    public string FirstName { get; set; } = string.Empty;
-    public string LastName { get; set; } = string.Empty; 
-    public string EmailAddress { get; set; } = string.Empty;
-    public string PhoneNumber { get; set; } = string.Empty;
-    public ICollection<ErrorReportModel>? ErrorReports { get; set; }
+    public Guid CustomerId { get; set; } = Guid.NewGuid();
+
+    [StringLength(50)]
+    public string FirstName { get; set; } = null!;
+
+    [StringLength(50)]
+    public string LastName { get; set; } = null!;
+
+    [StringLength(100)]
+    public string EmailAddress { get; set; } = null!;
+
+    [Column(TypeName = "char(13)")]
+    public string? PhoneNumber { get; set; }
+
+
+    public ICollection<ErrorReportEntity> ErrorReports = new HashSet<ErrorReportEntity>();
 
 
     //Takes a Customer and makes a CustomerEntity
-    public static implicit operator CustomerEntity(CustomerModel customer)
+    public static implicit operator CustomerEntity(Customer customer)
     {
         return new CustomerEntity
         {
@@ -32,11 +42,11 @@ public class CustomerEntity
     }
 
     //Takes a CustomerEntity and makes a Customer
-    public static implicit operator CustomerModel(CustomerEntity customerEntity)
+    public static implicit operator Customer(CustomerEntity customerEntity)
     {
-        return new CustomerModel
+        return new Customer
         {
-            Id = customerEntity.Id,
+            CustomerId = customerEntity.CustomerId,
             FirstName = customerEntity.FirstName,
             LastName = customerEntity.LastName,
             EmailAddress = customerEntity.EmailAddress,
@@ -45,14 +55,14 @@ public class CustomerEntity
     }
 
     //Takes a Case and makes a CustomerEntity
-    public static explicit operator CustomerEntity(ErrorReportModel errorReport)
+    public static implicit operator CustomerEntity(ErrorReportModel task)
     {
         return new CustomerEntity
         {
-            FirstName = errorReport.CustomerFirstName,
-            LastName = errorReport.CustomerLastName,
-            EmailAddress = errorReport.CustomerEmailAddress,
-            PhoneNumber = errorReport.CustomerPhoneNumber
+            FirstName = task.CustomerFirstName,
+            LastName = task.CustomerLastName,
+            EmailAddress = task.CustomerEmailAdress,
+            PhoneNumber = task.CustomerPhoneNumber
         };
     }
 }

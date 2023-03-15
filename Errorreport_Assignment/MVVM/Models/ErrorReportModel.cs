@@ -10,11 +10,12 @@ public class ErrorReportModel
 {
     [Key]
     public int Id { get; set; }
-    public string Description { get; set; }
-    public DateTimeOffset EntryTime { get; set; }
-    public int Status { get; set; }
-    public Guid CustomerId { get; set; }
-    public virtual CustomerModel Customer { get; set; }
-    public virtual ICollection<CommentModel> CommentString { get; set; }
+    public string Description { get; set; } = null!;
+    public DateTime EntryTime { get; set; } = DateTime.Now;
+    public ErrorReportStatus Status { get; set; } = ErrorReportStatus.NotStarted;
+    public string CustomerFirstName { get; set; } = null!;
+    public string CustomerLastName { get; set; } = null!;
+    public string CustomerEmailAddress { get; set; } = null!;
+    public string? CustomerPhoneNumber { get; set; }
 
 }

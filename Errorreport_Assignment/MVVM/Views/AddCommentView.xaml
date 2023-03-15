@@ -24,90 +24,327 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
         <TextBlock 
             Grid.Row="0"
-            Text="Detailed information:" 
+            Text="Detaljerad information:" 
             FontSize="16" 
-            Margin="0 20 0 10" 
+            Margin="0 20 0 0" 
             FontWeight="DemiBold" 
-            Foreground="MediumPurple"/>
+            Foreground="#554c4b"/>
+
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!--User information-->
+            <Border
+                Grid.Column="1"
+                BorderThickness="10"
+                CornerRadius="2"
+                BorderBrush="#fff4f3">
+                <Grid
+                    Background="#fff4f3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock 
+                        Grid.Column="0"
+                        Grid.Row="0"
+                        HorizontalAlignment="Right"
+                        Margin="0 0 10 0"
+                        Foreground="#554c4b"
+                        Text="Ärendeskapare:"/>
+                    <TextBlock 
+                        Grid.Column="0"
+                        Grid.Row="1"
+                        HorizontalAlignment="Right"
+                        Margin="0 0 10 0"
+                        Foreground="#554c4b"
+                        Text="Telefonnumber:"/>
+                    <TextBlock 
+                        Grid.Column="0"
+                        Grid.Row="2"
+                        HorizontalAlignment="Right"
+                        Margin="0 0 10 0"
+                        Foreground="#554c4b"
+                        Text="Email:"/>
+
+                    <TextBlock
+                        Grid.Column="1"
+                        Grid.Row="0"
+                        Foreground="#554c4b">
+                        <Run Text="{Binding FirstName}"/>
+                        <Run Text="{Binding LastName}"/>
+                    </TextBlock>
+
+                    <TextBlock
+                        Grid.Column="1"
+                        Grid.Row="1"
+                        Foreground="#554c4b"
+                        Text="{Binding PhoneNumber}"/>
+
+                    <TextBlock
+                        Grid.Column="1"
+                        Grid.Row="2"
+                        Foreground="#554c4b"
+                        Text="{Binding Email}"/>
+                </Grid>
+            </Border>
+
+            <!--Case information-->
+            <StackPanel
+                Grid.Column="0"
+                Margin="10 0 0 0"
+                VerticalAlignment="Bottom">
+                <TextBlock
+                    Foreground="#554c4b">
+                        <Run FontWeight="Bold" 
+                             Text="ÄrendeId:"/>
+                        <Run Text="{Binding Id}"/>
+                </TextBlock>
+
+                <TextBlock
+                    Foreground="#554c4b">
+                        <Run
+                            FontWeight="Bold" 
+                            Text="Skapades:"/>
+                        <Run Text="{Binding EntryTime}"/>
+                </TextBlock>
+            </StackPanel>
+        </Grid>
 
         <TextBlock
-            Grid.Row="1">
-                <Run Text="CaseId:"/>
-                <Run Text="{Binding Id}"/>
+            Grid.Row="2"
+            FontWeight="Bold" 
+            Margin="10 20 0 5"
+            Foreground="#554c4b"
+            Text="Beskrivning av ärende:"/>
+
+        <Border
+            Grid.Row="3"
+            CornerRadius="2"
+            BorderThickness="10"
+            BorderBrush="White">
+
+            <TextBlock
+                Background="White"
+                Padding="10 0 10 0"
+                Foreground="#554c4b"
+                Text="{Binding Description}"/>
+        </Border>
+
+        <TextBlock
+            Grid.Row="4"
+            FontWeight="Bold"
+            Foreground="#554c4b"
+            Margin="10 20 0 5">
+                <Run Text="Kommentar(er):"/>
         </TextBlock>
 
-        <TextBlock
-            Grid.Row="2">
-                <Run Text="Was created:"/>
-                <Run Text="{Binding EntryTime}"/>
-        </TextBlock>
+        <Border
+            Grid.Row="5"
+            BorderBrush="White"
+            CornerRadius="2"
+            BorderThickness="5 10">
+            <ListBox 
+                MinHeight="25"
+                MaxHeight="150"
+                BorderThickness="0"
+                HorizontalContentAlignment="Stretch"
+                ItemsSource="{Binding CommentsList}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid
+                            HorizontalAlignment="Stretch"
+                            Margin="0 3 0 3"
+                            Background="#fff4f3">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="150"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel
+                                Grid.Column="0"
+                                Orientation="Horizontal">
+
+                                <TextBlock 
+                                    Padding="10 5 0 5"
+                                    Foreground="#554c4b"
+                                    Text="{Binding EntryTime, StringFormat='dd/MM/yyyy HH:mm'}"/>
+                                <TextBlock 
+                                    Padding="0 5 0 5"
+                                    Foreground="#554c4b"
+                                    Text=" :   "/>
+                                <TextBlock 
+                                    Padding="0 5 0 5"
+                                    Foreground="#554c4b"
+                                    Text="{Binding CommentString}"/>
+                            </StackPanel>
+
+                            <StackPanel
+                                Orientation="Horizontal"
+                                Grid.Column="1">
+
+                                <TextBlock 
+                                    Padding="0 5 0 5"
+                                    Foreground="#554c4b"
+                                    Text=" // "/>
+                                <TextBlock 
+                                    Padding="0 5 0 5"
+                                    Foreground="#554c4b"
+                                    Text="{Binding SigningEmployee.FirstName}"/>
+                                <TextBlock 
+                                    Padding="0 5 0 5"
+                                    Text=" "/>
+                                <TextBlock 
+                                    Padding="0 5 0 5"
+                                    Foreground="#554c4b"
+                                    Text="{Binding SigningEmployee.LastName}"/>
+                            </StackPanel>
+
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Border>
 
         <TextBlock
-            Grid.Row="3">
-                <Run Text="Case creator:"/>
-                <Run Text="{Binding FirstName}"/>
-                <Run Text="{Binding LastName}"/>
-        </TextBlock>
+            Grid.Row="6"
+            FontWeight="Bold"
+            Foreground="#554c4b"
+            Text="Aktuell status: "
+            Margin="10 10 0 5"/>
 
-        <TextBlock
-            Grid.Row="4">
-                <Run Text="Phone number:"/>
-                <Run Text="{Binding PhoneNumber}"/>
-        </TextBlock>
-
-        <TextBlock
-            Grid.Row="5">
-                <Run Text="Email Adrss:"/>
-                <Run Text="{Binding EmailAddress}"/>
-        </TextBlock>
-
-        <TextBlock
-            Grid.Row="6">
-                <Run Text="Description of case:"/>
-                <Run Text="{Binding Description}"/>
-        </TextBlock>
-
-        <TextBlock
+        <Border
             Grid.Row="7"
-            FontSize="16"
-            Margin="0 10 0 0">
-                <Run Text="Status:"/>
-                <Run Text="{Binding Status}"/>
-        </TextBlock>
+            CornerRadius="2"
+            BorderThickness="10"
+            HorizontalAlignment="Left"
+            BorderBrush="White">
 
-        <TextBlock 
+            <TextBlock
+                Background="White"
+                HorizontalAlignment="Left"
+                Padding="10 0 10 0"
+                Foreground="#554c4b"
+                Text="{Binding Status}"/>
+        </Border>
+
+
+        <!--Change status-->
+        <Border 
             Grid.Row="8"
-            Text="Change status:" 
-            FontSize="16" 
-            Margin="0 10 0 10" 
-            FontWeight="DemiBold" 
-            Foreground="MediumPurple"/>
+            Margin="0 30 0 0"
+            BorderThickness="0,0.5,0,0" 
+            BorderBrush="#554c4b">
+            <TextBlock 
+                Text="Ändra status:" 
+                FontSize="16" 
+                Margin="0 10 0 10" 
+                FontWeight="DemiBold" 
+                Foreground="#554c4b"/>
+        </Border>
 
         <ComboBox 
             Grid.Row="9"
             Width="170" 
             Height="25" 
+            Margin="10 0 0 0"
+            Foreground="#554c4b"
             HorizontalAlignment="Left"
             SelectedValuePath="Content"
             SelectedValue="{Binding SelectedStatus, Mode=TwoWay}">
-            <ComboBoxItem Content="Select an updated status:"/>
-            <ComboBoxItem Content="Not started"/>
-            <ComboBoxItem Content="Ongoing"/>
-            <ComboBoxItem Content="Completed"/>
+            <ComboBoxItem Content="Välj en ny status:"/>
+            <ComboBoxItem Content="Ej påbörjad"/>
+            <ComboBoxItem Content="Pågående"/>
+            <ComboBoxItem Content="Avslutad"/>
         </ComboBox>
-
 
         <Button
             Grid.Row="10"
-            Content="UPDATE STATUS"
-            HorizontalAlignment="Left"
-            Margin="0 10 0 10"
-            Padding="10 5 10 5"
+            Content="UPPDATERA STATUS"
+            Style="{StaticResource greenBtn}"
+            Margin="10 10 0 0"
             Command="{Binding UpdateStatusCommand}"/>
+
+        <Border 
+            Grid.Row="11"
+            Margin="0 30 0 0"
+            BorderThickness="0,0.5,0,0" 
+            BorderBrush="#554c4b">
+            <TextBlock 
+                    Margin="0 10 0 10"
+                    Text="Lägg till en kommentar:"
+                    FontSize="16" 
+                    FontWeight="DemiBold" 
+                    Foreground="#554c4b"/>
+        </Border>
+
+        <TextBox
+            Grid.Row="12"
+            Padding="3" 
+            Height="60"
+            Margin="10 0 10 0"
+            BorderThickness="0"
+            TextWrapping="Wrap"
+            AcceptsReturn="True"
+            Foreground="#554c4b"
+            VerticalScrollBarVisibility="Auto"
+            Text="{Binding EnteredComment}" />
+
+        <TextBlock
+            Grid.Row="13"
+            Foreground="#554c4b"
+            Margin="10 10 0 5">
+                <Run
+                    FontWeight="Bold"
+                    Text="Signerat:"/>
+        </TextBlock>
+
+        <ComboBox 
+            Grid.Row="14"
+            Width="170" 
+            Height="25" 
+            Margin="10 0 0 0"
+            Foreground="#554c4b"
+            HorizontalAlignment="Left"
+            SelectedValue="{Binding SelectedEmployee}"
+            ItemsSource="{Binding EmployeesList}"
+            SelectedIndex="0">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock 
+                        Foreground="#554c4b"
+                        Text="{Binding NameInitials}" />
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+        <Button
+            Grid.Row="15"
+            Content="LÄGG TILL KOMMENTAR"
+            Command="{Binding AddCommentCommand}"
+            Style="{StaticResource greenBtn}"
+            Margin="10 10 0 10"/>
+
     </Grid>
-    
+
 </UserControl>

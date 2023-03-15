@@ -13,9 +13,8 @@ namespace Errorreport_Assignment.MVVM.Models
         public Guid CustomerId { get; set; }
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
-        public string EmailAddress { get; set; } = null!;
-        public string PhoneNumber { get; set; } = null!;
-        public ICollection<ErrorReportModel>? ErrorReports { get; set; }
+        public string EmailAdress { get; set; } = null!;
+        public string? PhoneNumber { get; set; }
     }
 
 }

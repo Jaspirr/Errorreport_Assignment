@@ -1,4 +1,5 @@
 ﻿using Errorreport_Assignment.MVVM.Model.Entitites;
+using Errorreport_Assignment.MVVM.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System;
@@ -12,9 +13,16 @@ public class DataContext : DbContext
     public DataContext(DbContextOptions<DataContext> options) : base(options)
     {
     }
-    public DbSet<CustomerEntity> Customers { get; set; }
-    public DbSet<ErrorReportEntity> ErrorReports { get; set; }
-    public DbSet<CommentEntity> Comments { get; set; }
+
+    public DataContext()
+    {
+    }
+
+    public DbSet<CustomerEntity> CustomerModels { get; set; }
+    public DbSet<ErrorReportEntity> ErrorReportModels { get; set; }
+    public DbSet<CommentEntity> CommentModels { get; set; }
+    public DbSet<WorkerEntity>
+
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

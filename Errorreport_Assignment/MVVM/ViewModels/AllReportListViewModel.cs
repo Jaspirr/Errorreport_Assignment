@@ -11,47 +11,20 @@ namespace Errorreport_Assignment.MVVM.ViewModels;
 
 public partial class AllReportListViewModel : ObservableObject
 {
-    private readonly DataContext _dbDataContext;
+    [ObservableProperty]
+    private ObservableCollection<ErrorReportModel> errorReportList = null!;
 
-    public AllReportListViewModel(ObservableCollection<ErrorReportModel> errorReportList)
-      {
-        _dbDataContext = new DataContext();
-        ErrorReports = new ObservableCollection<ErrorReportModel>(_dbDataContext.ErrorReports
-            .Select(er => new ErrorReportModel
-            {
-                ErrorReportId = er.ErrorReportId,
-                Description = er.Description,
-                Status = er.Status,
-                EntryTime = er.EntryTime,
-                Customer = new CustomerModel
-                {
-                    Id = er.Customer.Id,
-                    FirstName = er.Customer.FirstName,
-                    LastName = er.Customer.LastName,
-                    EmailAddress = er.Customer.EmailAddress,
-                    PhoneNumber = er.Customer.PhoneNumber
-                }
-            })
-        );
+    public async Task populateErrorReportList()
+    {
+        errorReportList = await DatabaseService.GetAllFromDbAsync();
     }
 
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    private ObservableCollection<ErrorReportModel> _errorReports;
-
-    public ObservableCollection<ErrorReportModel> ErrorReports
+    public AllReportListViewModel()
     {
-        get { return _errorReports; }
-        set
-        {
-            if (_errorReports != value)
-            {
-                _errorReports = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ErrorReports)));
-            }
-        }
+        Task.Run(async () => await populateErrorReportList());
     }
 }
+
 // private ErrorReportModel? _clickedErrorReport;
 // public static AllReportListViewModel Instance { get; } = new AllReportListViewModel();
 

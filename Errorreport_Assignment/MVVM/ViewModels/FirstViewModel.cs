@@ -2,7 +2,7 @@
 
 namespace Errorreport_Assignment.MVVM.ViewModels
 {
-    internal class FirstViewModel
+    internal class FirstViewModel : ObservableObject
     {
     }
 }
