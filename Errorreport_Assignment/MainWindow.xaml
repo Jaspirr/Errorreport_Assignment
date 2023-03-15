@@ -1,0 +1,93 @@
+﻿<Window x:Class="Errorreport_Assignment.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Errorreport_Assignment"
+        xmlns:viewmodels="clr-namespace:Errorreport_Assignment.MVVM.ViewModels"
+        xmlns:contexts="clr-namespace:Errorreport_Assignment.Contexts" 
+        xmlns:views="clr-namespace:Errorreport_Assignment.MVVM.Views"
+        d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid 
+            Grid.Column="0"
+            Margin="0" 
+            Background="Bisque">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+
+            <Button
+                Grid.Row="0"
+                Content="Add"
+                Cursor="Hand"
+                Background="MediumPurple"
+                BorderThickness="0"
+                Padding="5"
+                Foreground="White"
+                FontWeight="DemiBold"
+                Margin="10 10 10 0" 
+                Command="{Binding GoToAddReportCommand}"/>
+
+            <Button
+                Grid.Row="1"
+                Content="All matters"
+                Cursor="Hand"
+                Background="MediumPurple"
+                BorderThickness="0"
+                Padding="5"
+                Foreground="White"
+                FontWeight="DemiBold"
+                Margin="10 10 10 0" 
+                Command="{Binding GoToAllReportListCommand}"/>
+
+            <Button
+                Grid.Row="2"
+                Content="Detailed information"
+                Cursor="Hand"
+                Background="MediumPurple"
+                BorderThickness="0"
+                Padding="5"
+                Foreground="White"
+                FontWeight="DemiBold"
+                Margin="10 10 10 0" 
+                Command="{Binding GoToAddCommentCommand}"/>
+
+        </Grid>
+
+        <Grid
+            Grid.Column="1"
+            Margin="0" 
+            Background="BlanchedAlmond">
+
+            <ContentControl Content="{Binding CurrentViewModel}">
+                <ContentControl.Resources>
+
+                    <DataTemplate DataType="{x:Type viewmodels:FirstViewModel}">
+                        <views:FirstView />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewmodels:AddReportViewModel}">
+                        <views:AddErrorReportView />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewmodels:AllReportListViewModel}">
+                        <views:AllErrorReportView />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewmodels:AddCommentViewModel}">
+                        <views:AddCommentView />
+                    </DataTemplate>
+                </ContentControl.Resources>
+            </ContentControl>
+        </Grid>
+    </Grid>
+</Window>
