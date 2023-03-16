@@ -83,11 +83,11 @@ public partial class AddCommentViewModel : ObservableObject
         entryTime = _currentErrorReport.EntryTime.ToString("dd/MM/yyyy HH:mm");
 
         //Convert the enum to a string, in swedish:
-        if (_currentErrorReport.Status == ErrorReportStatus.Open)
+        if (_currentErrorReport.Status == ErrorReportStatus.Open.ToString())
             status = "Ej påbörjad";
-        else if (_currentErrorReport.Status == ErrorReportStatus.InProgress)
+        else if (_currentErrorReport.Status == ErrorReportStatus.InProgress.ToString())
             status = "Pågående";
-        else if (_currentErrorReport.Status == ErrorReportStatus.Completed)
+        else if (_currentErrorReport.Status == ErrorReportStatus.Closed.ToString())
             status = "Avslutad";
 
         firstName = _currentErrorReport.CustomerFirstName;
@@ -106,11 +106,11 @@ public partial class AddCommentViewModel : ObservableObject
     public async Task UpdateStatusAsync()
     {
         if (selectedStatus == "Ej påbörjad")
-            _currentErrorReport.Status = ErrorReportStatus.Open;
+            _currentErrorReport.Status = ErrorReportStatus.Open.ToString();
         else if (selectedStatus == "Pågående")
-            _currentErrorReport.Status = ErrorReportStatus.InProgress;
+            _currentErrorReport.Status = ErrorReportStatus.InProgress.ToString();
         else if (selectedStatus == "Avslutad")
-            _currentErrorReport.Status = ErrorReportStatus.Closed;
+            _currentErrorReport.Status = ErrorReportStatus.Closed.ToString();
 
 
         if (selectedStatus != "Välj en ny status:")

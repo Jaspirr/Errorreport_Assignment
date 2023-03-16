@@ -12,10 +12,10 @@ public  class CommentEntity
     public int Id { get; set; }
 
     [MaxLength]
-    public string Comment { get; set; } = null!;
+    public string Text { get; set; } = null!;
 
     [Column(TypeName = "datetime")]
-    public DateTime EntryTime { get; set; }
+    public DateTime CreatedDate { get; set; }
 
 
     [Required]
@@ -31,24 +31,24 @@ public  class CommentEntity
 
     #region implicit operators
 
-    public static implicit operator CommentEntity(CommentModel comment)
+    public static implicit operator CommentEntity(CommentModel text)
     {
         return new CommentEntity
         {
-            Comment = comment.CommentString,
-            EntryTime = comment.EntryTime,
-            WorkerId = comment.SigningWorker.Id
+            Text = text.Text,
+            CreatedDate = text.CreatedDate,
+            WorkerId = text.CommentId
         };
     }
 
-    public static implicit operator CommentModel(CommentEntity commentEntity)
+    public static implicit operator CommentModel(CommentEntity textEntity)
     {
         return new CommentModel
         {
-            Id = commentEntity.Id,
-            CommentString = commentEntity.Comment,
-            EntryTime = commentEntity.EntryTime,
-            SigningWorker = commentEntity.Worker
+            CommentId = textEntity.Id,
+            Text = textEntity.Text,
+            CreatedDate = textEntity.CreatedDate,
+            WorkerId = textEntity.Worker
         };
     }
 

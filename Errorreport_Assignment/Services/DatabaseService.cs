@@ -57,7 +57,7 @@ internal class DatabaseService
     {
         var _errorReports = new ObservableCollection<ErrorReportModel>();
 
-        foreach (var _errorReport in await _context.ErrorReportModels.Include(x => x.Customer).ToListAsync())
+        foreach (var _errorReport in await _context.ErrorReports.Include(x => x.Customer).ToListAsync())
         {
             CustomerEntity customerEntity = _errorReport.Customer;
             ErrorReportEntity errorReportEntity = _errorReport;

@@ -12,6 +12,7 @@ public class DataContext : DbContext
 {
     public DbSet<CustomerEntity> Customers { get; set; }
     public DbSet<ErrorReportEntity> ErrorReports { get; set; }
+    public DbSet<CommentEntity> Comments { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

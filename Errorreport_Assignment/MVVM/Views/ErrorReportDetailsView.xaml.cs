@@ -23,11 +23,9 @@ namespace Errorreport_Assignment.MVVM.Views
     /// </summary>
     public partial class ErrorReportDetailsView : UserControl
     {
-        public ErrorReportDetailsView(ErrorReportModel errorReport)
+        public ErrorReportDetailsView()
         {
             InitializeComponent();
-
-            DataContext = new ErrorReportDetailsViewModel(errorReport, new DatabaseService());
         }
     }
 }
