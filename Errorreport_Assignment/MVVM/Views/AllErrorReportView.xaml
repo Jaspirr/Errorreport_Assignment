@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Errorreport_Assignment.MVVM.Views" 
              xmlns:viewmodels="clr-namespace:Errorreport_Assignment.MVVM.ViewModels"
              xmlns:models="clr-namespace:Errorreport_Assignment.MVVM.Models"
-             d:DataContext="{d:DesignInstance Type=viewmodels:AllReportListViewModel}"
+             d:DataContext="{d:DesignInstance Type=viewmodels:AllErrorReportViewModel}"
 
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">

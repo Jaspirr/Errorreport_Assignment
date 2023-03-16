@@ -12,7 +12,7 @@ using System.Runtime.CompilerServices;
 
 namespace Errorreport_Assignment.MVVM.ViewModels;
 
-public class AllErrorReportListViewModel : INotifyPropertyChanged
+public class AllErrorReportViewModel : INotifyPropertyChanged
 {
     public ObservableCollection<ErrorReportEntity> ErrorReports { get; set; }
 
@@ -44,10 +44,11 @@ public class AllErrorReportListViewModel : INotifyPropertyChanged
     public delegate void ClickedErrorReportDelegate(ErrorReportEntity errorReport);
     public ClickedErrorReportDelegate clickedErrorReport;
 
-    public AllErrorReportListViewModel(ObservableCollection<ErrorReportEntity> errorReports)
+    public AllErrorReportViewModel(ObservableCollection<ErrorReportEntity> errorReports)
     {
         ErrorReports = errorReports;
     }
+
 
     public event PropertyChangedEventHandler PropertyChanged;
 

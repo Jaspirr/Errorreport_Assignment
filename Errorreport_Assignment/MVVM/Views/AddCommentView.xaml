@@ -5,8 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Errorreport_Assignment.MVVM.Views"
              xmlns:entity="clr-namespace:Errorreport_Assignment.MVVM.Model.Entitites"
-             xmlns:viewmodels="clr-namespace:Errorreport_Assignment.MVVM.ViewModels"
-             d:DataContext="{d:DesignInstance Type=viewmodels:AddCommentViewModel}"
+             xmlns:vm="clr-namespace:Errorreport_Assignment.MVVM.ViewModels;assembly=Errorreport_Assignment"
+             d:DataContext="{d:DesignInstance Type=vm:AddCommentViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              >

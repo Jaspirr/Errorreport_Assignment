@@ -8,36 +8,41 @@ using System.ComponentModel;
 using Errorreport_Assignment.Contexts;
 using Errorreport_Assignment.MVVM.Model.Entitites;
 using System.Windows.Input;
+using Errorreport_Assignment.MVVM.Views;
 
 namespace Errorreport_Assignment.MVVM.ViewModels;
 
-public class MainViewModel : INotifyPropertyChanged
+public partial class MainViewModel : ObservableObject
 {
-    private ObservableCollection<ErrorReportEntity> _errorReports;
-
-    public ObservableCollection<ErrorReportEntity> ErrorReports
-    {
-        get { return _errorReports; }
-        set
-        {
-            _errorReports = value;
-            OnPropertyChanged(nameof(ErrorReports));
-        }
-    }
-
-    public AllErrorReportListViewModel AllErrorReportListViewModel { get; set; }
+    [ObservableProperty]
+    public static ObservableObject currentViewModel = null!;
 
     public MainViewModel()
     {
-        ErrorReports = new ObservableCollection<ErrorReportEntity>();
-        AllErrorReportListViewModel = new AllErrorReportListViewModel(ErrorReports);
+        CurrentViewModel = new FirstViewModel();
     }
 
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    protected void OnPropertyChanged(string name)
+    //Navigation commands:
+    [RelayCommand]
+    public void GoToAllErrorReportList()
     {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        CurrentViewModel = new AllErrorReportViewModel();
+    }
+
+    [RelayCommand]
+    public void GoToAddErrorReport()
+    {
+        CurrentViewModel = new AddErrorReportViewModel();
+    }
+
+    [RelayCommand]
+    public void GoToAddComment()
+    {
+        ErrorReportModel _currentErrorReport = AllErrorReportView.clickedErrorReport;
+
+        if (_currentErrorReport != null)
+            CurrentViewModel = new AddCommentViewModel(_currentErrorReport);
+        else
+            CurrentViewModel = new ErrorReportDetailsViewModel();
     }
 }
-

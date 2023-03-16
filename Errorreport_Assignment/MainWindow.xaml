@@ -80,7 +80,7 @@
                     <DataTemplate DataType="{x:Type viewmodels:AddErrorReportViewModel}">
                         <views:AddErrorReportView />
                     </DataTemplate>
-                    <DataTemplate DataType="{x:Type viewmodels:AllErrorReportListViewModel}">
+                    <DataTemplate DataType="{x:Type viewmodels:AllErrorReportViewModel}">
                         <views:AllErrorReportView />
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type viewmodels:AddCommentViewModel}">

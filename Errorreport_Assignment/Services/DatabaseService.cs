@@ -8,6 +8,7 @@ using System;
 using Microsoft.Data.SqlClient;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Errorreport_Assignment.Services;
 
@@ -20,9 +21,9 @@ internal class DatabaseService
         CustomerEntity customerEntity = newErrorReport;
         ErrorReportEntity errorReportEntity = newErrorReport;
         CustomerEntity _currentCustomer = null!;
-
+        WorkerEntity workerEntity = null!;
         //Checks if there is any customer in the db with the entered email already
-        var _allCustomers = await _context.CustomerModels.ToListAsync();
+        var _allCustomers = await _context.Customers.ToListAsync();
         var customerNotUniqueEmail = _allCustomers.Where(x => x.EmailAddress == customerEntity.EmailAddress);
 
         foreach (var customer in customerNotUniqueEmail)
@@ -64,7 +65,7 @@ internal class DatabaseService
 
             _errorReports.Add(new ErrorReportModel
             {
-                Id = errorReportEntity.ErrorReportId,
+                ErrorReportId = errorReportEntity.ErrorReportId,
                 Description = errorReportEntity.Description,
                 EntryTime = errorReportEntity.EntryTime,
                 Status = errorReportEntity.Status,
@@ -80,15 +81,15 @@ internal class DatabaseService
 
     public static async Task<ObservableCollection<WorkerModel>> GetAllWorkersAsync()
     {
-        var _worker = new ObservableCollection<WorkerModel>();
+        var _workers = new ObservableCollection<WorkerModel>();
 
-        foreach (var _employee in await _context.WorkerModel.ToListAsync())
+        foreach (var _worker in await _context.Workers.ToListAsync())
         {
             WorkerEntity workerEntity = _worker;
 
             _workers.Add(new WorkerModel
             {
-                Id = WorkerEntity.Id,
+                Id = WorkerEntity.WorkerId,
                 FirstName = WorkerEntity.FirstName,
                 LastName = WorkerEntity.LastName,
                 NameInitials = WorkerEntity.NameInitials
@@ -99,18 +100,18 @@ internal class DatabaseService
     }
 
 
-    public static async Task<ObservableCollection<CommentModel>> GetSpecificCommentsFromDbAsync(ErrorReportModel currentCase)
+    public static async Task<ObservableCollection<CommentModel>> GetSpecificCommentsFromDbAsync(ErrorReportModel currentErrorReport)
     {
         var _allComments = new ObservableCollection<CommentEntity>();
         var _actualComments = new ObservableCollection<CommentModel>();
-        var _currentCaseId = currentCase.Id;
+        var _currentErrorReportId = currentErrorReport.ErrorReportId;
 
-        foreach (var _comment in await _context.CommentModels.ToListAsync())
+        foreach (var _comment in await _context.Comments.ToListAsync())
         {
             _allComments.Add(_comment);
         };
 
-        foreach (var _actualComment in _allComments.Where(x => x.ErrorReportId == _currentCaseId))
+        foreach (var _actualComment in _allComments.Where(x => x.ErrorReportId == _currentErrorReportId))
         {
             CommentModel _comment = _actualComment;
             _actualComments.Add(_comment);
@@ -121,7 +122,7 @@ internal class DatabaseService
 
     public static async Task ChangeStatusAsync(ErrorReportModel currentErrorReport)
     {
-        var _dbErrorReportEntity = await _context.ErrorReportModels.FirstOrDefaultAsync(x => x.ErrorReportId == currentErrorReport.Id);
+        var _dbErrorReportEntity = await _context.ErrorReports.FirstOrDefaultAsync(x => x.ErrorReportId == currentErrorReport.ErrorReportId);
 
         _dbErrorReportEntity!.Status = currentErrorReport.Status;
 
@@ -137,15 +138,15 @@ internal class DatabaseService
         await _context.SaveChangesAsync();
     }
 
-    public static async Task RemoveCaseAsync(ErrorReportModel clickedErrorReport)
+    public static async Task RemoveErrorReportAsync(ErrorReportModel clickedErrorReport)
     {
-        var _dbErrorReportEntity = await _context.ErrorReportModels.FirstOrDefaultAsync(x => x.ErrorReportId == clickedErrorReport.Id);
+        var _dbErrorReportEntity = await _context.ErrorReports.FirstOrDefaultAsync(x => x.ErrorReportId == clickedErrorReport.ErrorReportId);
 
         if (_dbErrorReportEntity != null)
         {
             var _allComments = new List<CommentEntity>();
 
-            foreach (var _comment in await _context.CommentModels.ToListAsync())
+            foreach (var _comment in await _context.Comments.ToListAsync())
             {
                 _allComments.Add(_comment);
             };
