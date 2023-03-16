@@ -24,31 +24,31 @@ public  class CommentEntity
     public ErrorReportEntity ErrorReport { get; set; } = null!;
 
     [Required]
-    public int EmployeeId { get; set; }
+    public int WorkerId { get; set; }
 
     public WorkerEntity Worker { get; set; } = null!;
 
 
     #region implicit operators
 
-    public static implicit operator CommentEntity(Comment comment)
+    public static implicit operator CommentEntity(CommentModel comment)
     {
         return new CommentEntity
         {
             Comment = comment.CommentString,
             EntryTime = comment.EntryTime,
-            EmployeeId = comment.SigningEmployee.Id
+            WorkerId = comment.SigningWorker.Id
         };
     }
 
-    public static implicit operator Comment(CommentEntity commentEntity)
+    public static implicit operator CommentModel(CommentEntity commentEntity)
     {
-        return new Comment
+        return new CommentModel
         {
             Id = commentEntity.Id,
             CommentString = commentEntity.Comment,
             EntryTime = commentEntity.EntryTime,
-            SigningEmployee = commentEntity.Employee
+            SigningWorker = commentEntity.Worker
         };
     }
 

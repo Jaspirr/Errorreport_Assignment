@@ -30,7 +30,7 @@ public class CustomerEntity
 
 
     //Takes a Customer and makes a CustomerEntity
-    public static implicit operator CustomerEntity(Customer customer)
+    public static implicit operator CustomerEntity(CustomerModel customer)
     {
         return new CustomerEntity
         {
@@ -42,9 +42,9 @@ public class CustomerEntity
     }
 
     //Takes a CustomerEntity and makes a Customer
-    public static implicit operator Customer(CustomerEntity customerEntity)
+    public static implicit operator CustomerModel(CustomerEntity customerEntity)
     {
-        return new Customer
+        return new CustomerModel
         {
             CustomerId = customerEntity.CustomerId,
             FirstName = customerEntity.FirstName,

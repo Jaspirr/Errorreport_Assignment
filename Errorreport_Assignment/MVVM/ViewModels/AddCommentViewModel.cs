@@ -63,13 +63,13 @@ public partial class AddCommentViewModel : ObservableObject
 
     public async Task populateLists(ErrorReportModel currentErrorReport)
     {
-        WorkersList = await DatabaseService.GetAllWorkersAsync();
-        CommentsList = await DatabaseService.GetSpecificCommentsFromDbAsync(currentErrorReport);
+        workersList = await DatabaseService.GetAllWorkersAsync();
+        commentsList = await DatabaseService.GetSpecificCommentsFromDbAsync(currentErrorReport);
     }
 
     public async Task populateWorkersList()
     {
-        WorkersList = await DatabaseService.GetAllEmployeesAsync();
+        workersList = await DatabaseService.GetAllWorkersAsync();
     }
 
     public AddCommentViewModel(ErrorReportModel currentErrorReport)
@@ -78,50 +78,50 @@ public partial class AddCommentViewModel : ObservableObject
 
         _currentErrorReport = currentErrorReport;
 
-        Id = _currentErrorReport.Id;
-        Description = _currentErrorReport.Description;
-        EntryTime = _currentErrorReport.EntryTime.ToString("dd/MM/yyyy HH:mm");
+        id = _currentErrorReport.Id;
+        description = _currentErrorReport.Description;
+        entryTime = _currentErrorReport.EntryTime.ToString("dd/MM/yyyy HH:mm");
 
         //Convert the enum to a string, in swedish:
         if (_currentErrorReport.Status == ErrorReportStatus.NotStarted)
-            Status = "Ej påbörjad";
+            status = "Ej påbörjad";
         else if (_currentErrorReport.Status == ErrorReportStatus.InProgress)
-            Status = "Pågående";
+            status = "Pågående";
         else if (_currentErrorReport.Status == ErrorReportStatus.Completed)
-            Status = "Avslutad";
+            status = "Avslutad";
 
-        FirstName = _currentErrorReport.CustomerFirstName;
-        LastName = _currentErrorReport.CustomerLastName;
-        EmailAdress = _currentErrorReport.CustomerEmailAdress;
+        firstName = _currentErrorReport.CustomerFirstName;
+        lastName = _currentErrorReport.CustomerLastName;
+        emailAdress = _currentErrorReport.CustomerEmailAdress;
 
         //Checks if there is a phonenumber in the db and if there isn't any,
         //sets it to a string-message for the frontend:
         if (_currentErrorReport.CustomerPhoneNumber == "             ")
-            PhoneNumber = "Inget telefonnummer angivet.";
+            phoneNumber = "Inget telefonnummer angivet.";
         else
-            PhoneNumber = _currentErrorReport.CustomerPhoneNumber;
+            phoneNumber = _currentErrorReport.CustomerPhoneNumber;
     }
 
     [RelayCommand]
     public async Task UpdateStatusAsync()
     {
-        if (SelectedStatus == "Ej påbörjad")
+        if (selectedStatus == "Ej påbörjad")
             _currentErrorReport.Status = ErrorReportStatus.NotStarted;
-        else if (SelectedStatus == "Pågående")
+        else if (selectedStatus == "Pågående")
             _currentErrorReport.Status = ErrorReportStatus.InProgress;
-        else if (SelectedStatus == "Avslutad")
+        else if (selectedStatus == "Avslutad")
             _currentErrorReport.Status = ErrorReportStatus.Completed;
 
 
-        if (SelectedStatus != "Välj en ny status:")
+        if (selectedStatus != "Välj en ny status:")
         {
             await DatabaseService.ChangeStatusAsync(_currentErrorReport);
 
             //This updates the frontend's current status to the new status
-            Status = SelectedStatus;
+            status = selectedStatus;
         }
         else
-            SelectedStatus = "Välj en ny status:";
+            selectedStatus = "Välj en ny status:";
     }
 
     [RelayCommand]
@@ -129,95 +129,15 @@ public partial class AddCommentViewModel : ObservableObject
     {
         CommentModel _comment = new CommentModel
         {
-            CommentString = EnteredComment,
-            SigningEmployee = SelectedWorker
+            CommentString = enteredComment,
+            SigningWorker = selectedWorker
         };
 
         await DatabaseService.SaveCommentToDbAsync(_comment, _currentErrorReport.Id);
 
         //Resetting and updating frontend
-        CommentsList.Add(_comment);
-        EnteredComment = "";
-        SelectedWorker = WorkersList[0];
+        commentsList.Add(_comment);
+        enteredComment = "";
+        selectedWorker = workersList[0];
     }
 }
-//private readonly ErrorReportModel currentTask = null!;
-
-//[ObservableProperty]
-//public int id;
-
-//[ObservableProperty]
-//private string? content = string.Empty;
-
-//[ObservableProperty]
-//public DateTime entryTime;
-
-//[ObservableProperty]
-//public int errorReportId;
-
-//[ObservableProperty]
-//public string? selectedStatus = "Välj en uppdaterad status:";
-
-//[ObservableProperty]
-//public string? status = string.Empty;
-
-// Properties for Customer
-//[ObservableProperty]
-//private string? firstName = string.Empty;
-
-//[ObservableProperty]
-//public string? lastName = string.Empty;
-
-//public string? emailAddress = string.Empty;
-
-//[ObservableProperty]
-//public string? phoneNumber = string.Empty;
-
-//public string? CommentContent { get; set; }
-
-//public AddCommentViewModel()
-//{
-//
-//public AddCommentViewModel(ErrorReportModel currentReport)
-//{
-//currentTask = currentReport;
-
-// id = currentTask.Id;
-//entryTime = currentTask.EntryTime;
-
-//if (currentTask.Status == ErrorReportStatus.NotStarted)
-//status = "Ej påbörjad";
-//else if (currentTask.Status == ErrorReportStatus.InProgress)
-//status = "Pågående";
-//else if (currentTask.Status == ErrorReportStatus.Completed)
-//status = "Avslutad";
-
-//firstName = currentTask.CustomerFirstName;
-//lastName = currentTask.CustomerLastName;
-//emailAddress = currentTask.CustomerEmailAddress;
-
-// if (currentTask.CustomerPhoneNumber == "             ")
-//phoneNumber = "Inget telefonnummer angivet.";
-//else
-//phoneNumber = currentTask.CustomerPhoneNumber;
-//}
-
-//[RelayCommand]
-//public async Task UpdateStatusAsync()
-//{
-//if (SelectedStatus != "Välj en uppdaterad status:")
-//{
-//if (SelectedStatus == "Ej påbörjad")
-//currentTask.Status = ErrorReportStatus.NotStarted;
-//else if (SelectedStatus == "Pågående")
-//currentTask.Status = ErrorReportStatus.InProgress;
-//else if (SelectedStatus == "Avslutad")
-//currentTask.Status = ErrorReportStatus.Completed;
-
-//await DatabaseService.ChangeStatusAsync(currentTask);
-
-//FRONTEND!
-//Status = SelectedStatus;
-//}
-//}
-//}

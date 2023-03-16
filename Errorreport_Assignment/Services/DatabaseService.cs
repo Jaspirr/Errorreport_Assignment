@@ -64,7 +64,7 @@ internal class DatabaseService
 
             _errorReport.Add(new ErrorReportModel
             {
-                Id = errorReportEntity.Id,
+                Id = errorReportEntity.ErrorReportId,
                 Description = errorReportEntity.Description,
                 EntryTime = errorReportEntity.EntryTime,
                 Status = errorReportEntity.Status,
@@ -82,7 +82,7 @@ internal class DatabaseService
     {
         var _worker = new ObservableCollection<WorkerModel>();
 
-        foreach (var _employee in await _context.WorkerModels.ToListAsync())
+        foreach (var _employee in await _context.WorkerModel.ToListAsync())
         {
             WorkerEntity workerEntity = _worker;
 
@@ -121,7 +121,7 @@ internal class DatabaseService
 
     public static async Task ChangeStatusAsync(ErrorReportModel currentErrorReport)
     {
-        var _dbErrorReportEntity = await _context.ErrorReportModels.FirstOrDefaultAsync(x => x.Id == currentErrorReport.Id);
+        var _dbErrorReportEntity = await _context.ErrorReportModels.FirstOrDefaultAsync(x => x.ErrorReportId == currentErrorReport.Id);
 
         _dbErrorReportEntity!.Status = currentErrorReport.Status;
 

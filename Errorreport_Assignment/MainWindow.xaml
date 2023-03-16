@@ -38,7 +38,7 @@
                 Foreground="White"
                 FontWeight="DemiBold"
                 Margin="10 10 10 0" 
-                Command="{Binding GoToAddReportCommand}"/>
+                Command="{Binding GoToAddErrorReportCommand}"/>
 
             <Button
                 Grid.Row="1"
@@ -50,7 +50,7 @@
                 Foreground="White"
                 FontWeight="DemiBold"
                 Margin="10 10 10 0" 
-                Command="{Binding GoToAllReportListCommand}"/>
+                Command="{Binding GoToAllErrorReportListCommand}"/>
 
             <Button
                 Grid.Row="2"
@@ -77,17 +77,14 @@
                     <DataTemplate DataType="{x:Type viewmodels:FirstViewModel}">
                         <views:FirstView />
                     </DataTemplate>
-                    <DataTemplate DataType="{x:Type viewmodels:AddReportViewModel}">
+                    <DataTemplate DataType="{x:Type viewmodels:AddErrorReportViewModel}">
                         <views:AddErrorReportView />
                     </DataTemplate>
-                    <DataTemplate DataType="{x:Type viewmodels:AllReportListViewModel}">
+                    <DataTemplate DataType="{x:Type viewmodels:AllErrorReportListViewModel}">
                         <views:AllErrorReportView />
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type viewmodels:AddCommentViewModel}">
                         <views:AddCommentView />
-                    </DataTemplate>
-                    <DataTemplate DataType="{x:Type viewmodels:ErrorReportDetailsViewModel}">
-                        <views:ErrorReportDetailsView />
                     </DataTemplate>
                 </ContentControl.Resources>
             </ContentControl>

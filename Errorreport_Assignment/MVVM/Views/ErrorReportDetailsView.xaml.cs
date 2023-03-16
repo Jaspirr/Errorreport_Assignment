@@ -1,4 +1,6 @@
-﻿using Errorreport_Assignment.MVVM.ViewModels;
+﻿using Errorreport_Assignment.MVVM.Models;
+using Errorreport_Assignment.MVVM.ViewModels;
+using Errorreport_Assignment.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +23,7 @@ namespace Errorreport_Assignment.MVVM.Views
     /// </summary>
     public partial class ErrorReportDetailsView : UserControl
     {
-        public ErrorReportDetailsView(ErrorReport errorReport)
+        public ErrorReportDetailsView(ErrorReportModel errorReport)
         {
             InitializeComponent();
 

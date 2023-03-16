@@ -33,7 +33,7 @@ public class ErrorReportEntity
     {
         return new ErrorReportModel
         {
-            ErrorReportId = errorReportEntity.ErrorReportId,
+            Id = errorReportEntity.ErrorReportId,
             Description = errorReportEntity.Description,
             EntryTime = errorReportEntity.EntryTime,
             Status = errorReportEntity.Status

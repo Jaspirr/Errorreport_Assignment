@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Errorreport_Assignment.MVVM.Models
 {
-    internal class WorkerModel
+    public class WorkerModel
     {
         public int Id { get; set; }
         public string FirstName { get; set; } = null!;

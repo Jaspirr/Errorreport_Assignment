@@ -11,7 +11,7 @@ public class CommentModel
     public int Id { get; set; }
     public string CommentString { get; set; } = null!;
     public DateTime EntryTime { get; set; } = DateTime.Now;
-    public Employee SigningEmployee { get; set; } = null!;
+    public WorkerModel SigningWorker { get; set; } = null!;
 
 }
 

@@ -21,12 +21,11 @@ public class DataContext : DbContext
     public DbSet<CustomerEntity> CustomerModels { get; set; }
     public DbSet<ErrorReportEntity> ErrorReportModels { get; set; }
     public DbSet<CommentEntity> CommentModels { get; set; }
-    public DbSet<WorkerEntity>
-
+    public DbSet<WorkerEntity> WorkersModels { get; set; } 
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Jesper\Documents\sql_db_NewNewErrorReport.mdf;Integrated Security=True;Connect Timeout=30");
+        optionsBuilder.UseSqlServer(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Jesper\Documents\sql_db_ErrorReportNewest.mdf;Integrated Security=True;Connect Timeout=30");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

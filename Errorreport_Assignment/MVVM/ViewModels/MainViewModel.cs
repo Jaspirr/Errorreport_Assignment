@@ -10,8 +10,7 @@ namespace Errorreport_Assignment.MVVM.ViewModels;
 
 public partial class MainViewModel : ObservableObject
 {
-    [ObservableProperty]
-    public static ObservableObject currentViewModel = null!;
+    public static ObservableObject CurrentViewModel = null!;
 
     public MainViewModel()
     {
@@ -22,19 +21,19 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     public void GoToAllErrorReportList()
     {
-        CurrentViewModel = new AllReportListViewModel();
+        CurrentViewModel = new AllErrorReportListViewModel();
     }
 
     [RelayCommand]
     public void GoToAddErrorReport()
     {
-        CurrentViewModel = new AddReportViewModel();
+        CurrentViewModel = new AddErrorReportViewModel();
     }
 
     [RelayCommand]
     public void GoToAddComment()
     {
-        ErrorReportModel _currentErrorReport = AllErrorReportListView.clickedCase;
+        ErrorReportModel _currentErrorReport = AllErrorReportListViewModel.clickedErrorReport;
 
         if (_currentErrorReport != null)
             CurrentViewModel = new AddCommentViewModel(_currentErrorReport);
