@@ -9,6 +9,8 @@ using System.ComponentModel;
 using Errorreport_Assignment.Contexts;
 using System;
 using Microsoft.EntityFrameworkCore;
+using Errorreport_Assignment.MVVM.Model.Entitites;
+using System.Collections.Generic;
 
 namespace Errorreport_Assignment.MVVM.ViewModels;
 
@@ -28,6 +30,8 @@ public partial class AddErrorReportViewModel : ObservableObject
 
     [ObservableProperty]
     private string enteredDescription = string.Empty;
+    public List<ErrorReportStatus> StatusList { get; set; } = new List<ErrorReportStatus> { ErrorReportStatus.Open, ErrorReportStatus.InProgress, ErrorReportStatus.Closed };
+
 
     private void ClearForm()
     {
@@ -49,7 +53,7 @@ public partial class AddErrorReportViewModel : ObservableObject
                 Description = enteredDescription,
                 CustomerFirstName = firstName,
                 CustomerLastName = lastName,
-                CustomerEmailAdress = emailAddress,
+                CustomerEmailAddress = emailAddress,
                 CustomerPhoneNumber = phoneNumber
             };
 

@@ -25,9 +25,7 @@ public class CustomerEntity
     [Column(TypeName = "char(13)")]
     public string? PhoneNumber { get; set; }
 
-
-    public ICollection<ErrorReportEntity> ErrorReports = new HashSet<ErrorReportEntity>();
-
+    public ICollection<ErrorReportEntity> ErrorReports { get; set; } = new HashSet<ErrorReportEntity>();
 
     //Takes a Customer and makes a CustomerEntity
     public static implicit operator CustomerEntity(CustomerModel customer)
@@ -54,15 +52,4 @@ public class CustomerEntity
         };
     }
 
-    //Takes a Case and makes a CustomerEntity
-    public static implicit operator CustomerEntity(ErrorReportModel task)
-    {
-        return new CustomerEntity
-        {
-            FirstName = task.CustomerFirstName,
-            LastName = task.CustomerLastName,
-            EmailAddress = task.CustomerEmailAdress,
-            PhoneNumber = task.CustomerPhoneNumber
-        };
-    }
 }

@@ -15,6 +15,7 @@ namespace Errorreport_Assignment.MVVM.Models
         public string LastName { get; set; } = null!;
         public string EmailAddress { get; set; } = null!;
         public string? PhoneNumber { get; set; }
+        public ICollection<ErrorReportEntity> ErrorReports { get; set; } = new HashSet<ErrorReportEntity>();
 
     }
 

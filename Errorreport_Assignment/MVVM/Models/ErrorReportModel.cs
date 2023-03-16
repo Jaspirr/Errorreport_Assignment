@@ -12,7 +12,7 @@ public class ErrorReportModel
     public int Id { get; set; }
     public string Description { get; set; } = null!;
     public DateTime EntryTime { get; set; } = DateTime.Now;
-    public ErrorReportStatus Status { get; set; } = ErrorReportStatus.NotStarted;
+    public string? Status { get; set; }
     public string CustomerFirstName { get; set; } = null!;
     public string CustomerLastName { get; set; } = null!;
     public string CustomerEmailAddress { get; set; } = null!;

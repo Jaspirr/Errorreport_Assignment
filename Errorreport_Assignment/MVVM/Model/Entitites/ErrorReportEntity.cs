@@ -17,6 +17,8 @@ public class ErrorReportEntity
     public CustomerModel? Customer { get; set; }
     public ICollection<CommentModel>? Comments { get; set; }
 
+    public const string Open = "Open";
+
 
 
     public static implicit operator ErrorReportEntity(ErrorReportModel task)
@@ -44,8 +46,7 @@ public class ErrorReportEntity
 
 
 public enum ErrorReportStatus
-{
-    NotStarted,
+{   Open,
     InProgress,
-    Completed
+    Closed
 }

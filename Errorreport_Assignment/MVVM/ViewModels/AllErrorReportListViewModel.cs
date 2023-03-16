@@ -6,23 +6,56 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using Errorreport_Assignment.Contexts;
 using System.Linq;
+using CommunityToolkit.Mvvm.Input;
+using Errorreport_Assignment.MVVM.Model.Entitites;
+using System.Runtime.CompilerServices;
 
 namespace Errorreport_Assignment.MVVM.ViewModels;
 
-public partial class AllErrorReportListViewModel : ObservableObject
+public class AllErrorReportListViewModel : INotifyPropertyChanged
 {
-    [ObservableProperty]
-    private ObservableCollection<ErrorReportModel> errorReportList = null!;
+    public ObservableCollection<ErrorReportEntity> ErrorReports { get; set; }
 
-    public async Task populateErrorReportList()
+    private ErrorReportEntity _selectedErrorReport;
+    public ErrorReportEntity SelectedErrorReport
     {
-        errorReportList = await DatabaseService.GetAllFromDbAsync();
+        get { return _selectedErrorReport; }
+        set
+        {
+            _selectedErrorReport = value;
+            OnPropertyChanged();
+        }
     }
 
-    public AllErrorReportListViewModel()
+    private RelayCommand _clickErrorReportCommand;
+    public RelayCommand ClickErrorReportCommand
     {
-        Task.Run(async () => await populateErrorReportList());
+        get
+        {
+            return _clickErrorReportCommand ?? (_clickErrorReportCommand = new RelayCommand(
+                () =>
+                {
+                    clickedErrorReport(SelectedErrorReport);
+                }
+                ));
+        }
+    }
+
+    public delegate void ClickedErrorReportDelegate(ErrorReportEntity errorReport);
+    public ClickedErrorReportDelegate clickedErrorReport;
+
+    public AllErrorReportListViewModel(ObservableCollection<ErrorReportEntity> errorReports)
+    {
+        ErrorReports = errorReports;
+    }
+
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }
+
 
 

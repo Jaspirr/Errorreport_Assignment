@@ -83,7 +83,7 @@ public partial class AddCommentViewModel : ObservableObject
         entryTime = _currentErrorReport.EntryTime.ToString("dd/MM/yyyy HH:mm");
 
         //Convert the enum to a string, in swedish:
-        if (_currentErrorReport.Status == ErrorReportStatus.NotStarted)
+        if (_currentErrorReport.Status == ErrorReportStatus.Open)
             status = "Ej påbörjad";
         else if (_currentErrorReport.Status == ErrorReportStatus.InProgress)
             status = "Pågående";
@@ -92,7 +92,7 @@ public partial class AddCommentViewModel : ObservableObject
 
         firstName = _currentErrorReport.CustomerFirstName;
         lastName = _currentErrorReport.CustomerLastName;
-        emailAdress = _currentErrorReport.CustomerEmailAdress;
+        emailAdress = _currentErrorReport.CustomerEmailAddress;
 
         //Checks if there is a phonenumber in the db and if there isn't any,
         //sets it to a string-message for the frontend:
@@ -106,11 +106,11 @@ public partial class AddCommentViewModel : ObservableObject
     public async Task UpdateStatusAsync()
     {
         if (selectedStatus == "Ej påbörjad")
-            _currentErrorReport.Status = ErrorReportStatus.NotStarted;
+            _currentErrorReport.Status = ErrorReportStatus.Open;
         else if (selectedStatus == "Pågående")
             _currentErrorReport.Status = ErrorReportStatus.InProgress;
         else if (selectedStatus == "Avslutad")
-            _currentErrorReport.Status = ErrorReportStatus.Completed;
+            _currentErrorReport.Status = ErrorReportStatus.Closed;
 
 
         if (selectedStatus != "Välj en ny status:")
@@ -129,8 +129,8 @@ public partial class AddCommentViewModel : ObservableObject
     {
         CommentModel _comment = new CommentModel
         {
-            CommentString = enteredComment,
-            SigningWorker = selectedWorker
+            Text = enteredComment,
+            WorkerId = selectedWorker
         };
 
         await DatabaseService.SaveCommentToDbAsync(_comment, _currentErrorReport.Id);

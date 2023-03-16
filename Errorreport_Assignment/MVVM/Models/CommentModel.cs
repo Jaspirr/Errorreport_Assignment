@@ -8,10 +8,10 @@ namespace Errorreport_Assignment.MVVM.Models;
 public class CommentModel
 {
     [Key]
-    public int Id { get; set; }
-    public string CommentString { get; set; } = null!;
-    public DateTime EntryTime { get; set; } = DateTime.Now;
-    public WorkerModel SigningWorker { get; set; } = null!;
+    public int CommentId { get; set; }
+    public string Text { get; set; } = null!;
+    public DateTime CreatedDate { get; set; } = DateTime.Now;
+    public WorkerModel WorkerId { get; set; } = null!;
 
 }
 

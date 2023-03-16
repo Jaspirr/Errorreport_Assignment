@@ -55,14 +55,14 @@ internal class DatabaseService
 
     public static async Task<ObservableCollection<ErrorReportModel>> GetAllFromDbAsync()
     {
-        var _errorReport = new ObservableCollection<ErrorReportModel>();
+        var _errorReports = new ObservableCollection<ErrorReportModel>();
 
         foreach (var _errorReport in await _context.ErrorReportModels.Include(x => x.Customer).ToListAsync())
         {
             CustomerEntity customerEntity = _errorReport.Customer;
             ErrorReportEntity errorReportEntity = _errorReport;
 
-            _errorReport.Add(new ErrorReportModel
+            _errorReports.Add(new ErrorReportModel
             {
                 Id = errorReportEntity.ErrorReportId,
                 Description = errorReportEntity.Description,
@@ -75,7 +75,7 @@ internal class DatabaseService
             });
         }
 
-        return _errorReport;
+        return _errorReports;
     }
 
     public static async Task<ObservableCollection<WorkerModel>> GetAllWorkersAsync()
