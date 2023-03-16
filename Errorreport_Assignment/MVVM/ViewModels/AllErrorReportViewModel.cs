@@ -12,8 +12,11 @@ using System.Runtime.CompilerServices;
 
 namespace Errorreport_Assignment.MVVM.ViewModels;
 
-public class AllErrorReportViewModel : INotifyPropertyChanged
+public class AllErrorReportViewModel : ObservableObject
 {
+    public AllErrorReportViewModel() 
+    {
+    }
     public ObservableCollection<ErrorReportEntity> ErrorReports { get; set; }
 
     private ErrorReportEntity _selectedErrorReport;

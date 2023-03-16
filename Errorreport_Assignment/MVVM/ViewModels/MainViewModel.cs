@@ -19,20 +19,20 @@ public partial class MainViewModel : ObservableObject
 
     public MainViewModel()
     {
-        CurrentViewModel = new FirstViewModel();
+
     }
 
     //Navigation commands:
     [RelayCommand]
-    public void GoToAllErrorReportList()
+    public void GoToAllErrorReport()
     {
-        CurrentViewModel = new AllErrorReportViewModel();
+        currentViewModel = new AllErrorReportViewModel();
     }
 
     [RelayCommand]
     public void GoToAddErrorReport()
     {
-        CurrentViewModel = new AddErrorReportViewModel();
+        currentViewModel = new AddErrorReportViewModel();
     }
 
     [RelayCommand]
@@ -41,8 +41,8 @@ public partial class MainViewModel : ObservableObject
         ErrorReportModel _currentErrorReport = AllErrorReportView.clickedErrorReport;
 
         if (_currentErrorReport != null)
-            CurrentViewModel = new AddCommentViewModel(_currentErrorReport);
+            currentViewModel = new AddCommentViewModel(_currentErrorReport);
         else
-            CurrentViewModel = new ErrorReportDetailsViewModel();
+            currentViewModel = new ErrorReportDetailsViewModel();
     }
 }

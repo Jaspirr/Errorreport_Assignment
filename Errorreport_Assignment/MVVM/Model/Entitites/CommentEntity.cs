@@ -9,7 +9,7 @@ namespace Errorreport_Assignment.MVVM.Model.Entitites;
 public  class CommentEntity
 {
     [Key]
-    public int Id { get; set; }
+    public int CommentId { get; set; }
 
     [MaxLength]
     public string Text { get; set; } = null!;
@@ -45,7 +45,7 @@ public  class CommentEntity
     {
         return new CommentModel
         {
-            CommentId = textEntity.Id,
+            CommentId = textEntity.CommentId,
             Text = textEntity.Text,
             CreatedDate = textEntity.CreatedDate,
             WorkerId = textEntity.Worker

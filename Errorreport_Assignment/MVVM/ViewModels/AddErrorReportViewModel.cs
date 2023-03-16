@@ -32,7 +32,9 @@ public partial class AddErrorReportViewModel : ObservableObject
     private string enteredDescription = string.Empty;
     public List<ErrorReportStatus> StatusList { get; set; } = new List<ErrorReportStatus> { ErrorReportStatus.Open, ErrorReportStatus.InProgress, ErrorReportStatus.Closed };
 
-
+    public AddErrorReportViewModel() 
+    {
+    }
     private void ClearForm()
     {
         firstName = string.Empty;

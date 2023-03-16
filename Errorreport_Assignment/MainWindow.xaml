@@ -8,6 +8,7 @@
         xmlns:contexts="clr-namespace:Errorreport_Assignment.Contexts" 
         xmlns:views="clr-namespace:Errorreport_Assignment.MVVM.Views"
         d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
+        
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
 
@@ -84,7 +85,7 @@
                         <views:AllErrorReportView />
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type viewmodels:AddCommentViewModel}">
-                        <views:AddCommentView />
+                        <views:AddCommentView/>
                     </DataTemplate>
                 </ContentControl.Resources>
             </ContentControl>

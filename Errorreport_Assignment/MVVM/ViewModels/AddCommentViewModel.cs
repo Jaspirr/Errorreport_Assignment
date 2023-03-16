@@ -15,7 +15,7 @@ namespace Errorreport_Assignment.MVVM.ViewModels;
 public partial class AddCommentViewModel : ObservableObject
 {
     [ObservableProperty]
-    private int? id;
+    private int? commmentId;
 
     [ObservableProperty]
     private string description = string.Empty;
@@ -56,6 +56,10 @@ public partial class AddCommentViewModel : ObservableObject
     [ObservableProperty]
     private ObservableCollection<CommentModel> commentsList = null!;
 
+    public AddCommentViewModel ()
+    {
+
+    }
     public AddCommentViewModel()
     {
         Task.Run(async () => await populateWorkersList());
@@ -78,7 +82,7 @@ public partial class AddCommentViewModel : ObservableObject
 
         _currentErrorReport = currentErrorReport;
 
-        id = _currentErrorReport.ErrorReportId;
+        Id = _currentErrorReport.ErrorReportId;
         description = _currentErrorReport.Description;
         entryTime = _currentErrorReport.EntryTime.ToString("dd/MM/yyyy HH:mm");
 
