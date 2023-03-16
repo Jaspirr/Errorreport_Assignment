@@ -9,7 +9,7 @@ namespace Errorreport_Assignment.MVVM.Models;
 public class ErrorReportModel
 {
     [Key]
-    public int Id { get; set; }
+    public int ErrorReportId { get; set; }
     public string Description { get; set; } = null!;
     public DateTime EntryTime { get; set; } = DateTime.Now;
     public string? Status { get; set; }

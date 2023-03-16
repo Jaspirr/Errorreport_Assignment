@@ -78,7 +78,7 @@ public partial class AddCommentViewModel : ObservableObject
 
         _currentErrorReport = currentErrorReport;
 
-        id = _currentErrorReport.Id;
+        id = _currentErrorReport.ErrorReportId;
         description = _currentErrorReport.Description;
         entryTime = _currentErrorReport.EntryTime.ToString("dd/MM/yyyy HH:mm");
 
@@ -133,7 +133,7 @@ public partial class AddCommentViewModel : ObservableObject
             WorkerId = selectedWorker
         };
 
-        await DatabaseService.SaveCommentToDbAsync(_comment, _currentErrorReport.Id);
+        await DatabaseService.SaveCommentToDbAsync(_comment, _currentErrorReport.ErrorReportId);
 
         //Resetting and updating frontend
         commentsList.Add(_comment);

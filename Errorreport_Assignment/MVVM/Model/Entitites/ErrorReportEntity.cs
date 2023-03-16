@@ -19,7 +19,15 @@ public class ErrorReportEntity
 
     public const string Open = "Open";
 
-
+    private CustomerEntity ConvertToCustomerEntity(ErrorReportModel errorReportModel)
+    {
+        CustomerEntity customerEntity = new CustomerEntity();
+        customerEntity.FirstName = errorReportModel.CustomerFirstName;
+        customerEntity.LastName = errorReportModel.CustomerLastName;
+        customerEntity.EmailAddress = errorReportModel.CustomerEmailAddress;
+        
+        return customerEntity;
+    }
 
     public static implicit operator ErrorReportEntity(ErrorReportModel task)
     {
@@ -35,7 +43,7 @@ public class ErrorReportEntity
     {
         return new ErrorReportModel
         {
-            Id = errorReportEntity.ErrorReportId,
+            ErrorReportId = errorReportEntity.ErrorReportId,
             Description = errorReportEntity.Description,
             EntryTime = errorReportEntity.EntryTime,
             Status = errorReportEntity.Status

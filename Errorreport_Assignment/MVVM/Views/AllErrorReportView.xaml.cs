@@ -40,7 +40,7 @@ namespace Errorreport_Assignment.MVVM.Views
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
-                Task.Run(async () => await DatabaseService.RemoveCaseAsync(_clickedErrorReport));
+                Task.Run(async () => await DatabaseService.RemoveErrorReportAsync(_clickedErrorReport));
                 clickedErrorReport = null!;
             }
         }
